@@ -22,6 +22,15 @@ class PostResource extends Resource
     {
         $user = auth()->user();
 
+        $statusOptions = [
+            'draft' => 'Draft',
+            'in_revision' => 'In Revision',
+        ];
+    
+        if ($user && $user->papel == 'admin') {
+            $statusOptions['publicado'] = 'Publicado';
+        }
+
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')->required()->maxLength(255),
@@ -46,11 +55,7 @@ class PostResource extends Resource
                     ->multiple()
                     ->required(),
                 Forms\Components\Select::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'in_revision' => 'In Revision',
-                        'publicado' => 'Publicado'
-                    ])
+                    ->options($statusOptions)
                     ->required(),
             ]);
     }
