@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -43,12 +44,6 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
-                // Tables\Columns\TextColumn::make('status')->formatStateUsing(fn (string $state): string => __($state == 1 ? 'Ativo' : 'Inativo'))
-                // ->badge()
-                // ->color(fn (string $state): string => match ($state) {
-                //     '0' => 'warning',
-                //     '1' => 'success',
-                // }),
                 Tables\Columns\ToggleColumn::make('status')
                 ->afterStateUpdated(function ($record, $state) {
                     $record->update(['status' => $state]);
@@ -84,5 +79,17 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        
+        $query = static::getModel()::query();
+        $user = auth()->user();
+
+        if ($user) {
+            $query->where('id', '!=', $user->id);
+        }
+
+        return $query;
     }
 }
