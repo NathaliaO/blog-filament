@@ -44,16 +44,15 @@ class PostResource extends Resource
                     ->default($user->name)
                     ->readonly(),
                 Forms\Components\TextInput::make('category')
-                    ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->disabled(!$user || $user->papel != 'admin'),
                 Forms\Components\Select::make('tags')
                     ->options([
                         'tag1',
                         'tag2',
                         'tag3'
                     ])
-                    ->multiple()
-                    ->required(),
+                    ->multiple()->disabled(!$user || $user->papel != 'admin'),
                 Forms\Components\Select::make('status')
                     ->options($statusOptions)
                     ->required(),
