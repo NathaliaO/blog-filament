@@ -3,15 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PostResource extends Resource
 {
@@ -47,8 +46,6 @@ class PostResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $user = auth()->user();
-
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
@@ -96,5 +93,25 @@ class PostResource extends Resource
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        
+        $query = static::getModel()::query();
+        $user = auth()->user();
+
+        if ($user && $user->papel == 'autor') {
+            $query->where('author', $user->name);
+        }
+        
+        if (
+            static::isScopedToTenant() &&
+            ($tenant = Filament::getTenant())
+        ) {
+            static::scopeEloquentQueryToTenant($query, $tenant);
+        }
+
+        return $query;
     }
 }
