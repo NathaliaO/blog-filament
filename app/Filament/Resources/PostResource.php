@@ -20,6 +20,8 @@ class PostResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $user = auth()->user();
+
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')->required()->maxLength(255),
@@ -29,7 +31,9 @@ class PostResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('author')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->default($user->name)
+                    ->readonly(),
                 Forms\Components\TextInput::make('category')
                     ->required()
                     ->maxLength(255),
