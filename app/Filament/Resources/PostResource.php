@@ -41,6 +41,13 @@ class PostResource extends Resource
                     ])
                     ->multiple()
                     ->required(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'in_revision' => 'In Revision',
+                        'publicado' => 'Publicado'
+                    ])
+                    ->required(),
             ]);
     }
 
