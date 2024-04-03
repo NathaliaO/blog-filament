@@ -62,6 +62,8 @@ class PostResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $user = auth()->user();
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
@@ -86,7 +88,7 @@ class PostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->visible(fn ($record) => $user && ($user->papel == 'admin' || $user->papel == 'autor' && $record->status === 'draft')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
