@@ -11,7 +11,9 @@ class Home extends Component
 {
     public function render()
     {
-        return view('livewire.home');
+        return view('livewire.home', [
+            'posts' => \App\Models\Post::where('status', 'publicado')->get(),
+        ]);
     }
 
     public function logout()
