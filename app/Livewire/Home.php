@@ -19,6 +19,7 @@ class Home extends Component
     public function logout()
     {
         Auth::logout();
+        return redirect()->to('/');
     }
 
     public function incrementLikes(int $postId): void

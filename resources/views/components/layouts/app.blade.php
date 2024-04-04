@@ -19,17 +19,18 @@
             </div>
 
             <div class="text-gray-500 font-bold">
-                @guest
+                @if(!auth()->check())
                     <a class="flex items-center" href="{{ \Filament\Facades\Filament::getLoginUrl() }}">
                         <x-heroicon-c-arrow-right-end-on-rectangle class="w-5 h-5 mr-1"/>
                         Login
                     </a>
                 @else
-                    <button wire:click.prevent="logout">Logout</button>
-                @endguest
+                    <a href="{{ route('logout')}}">Logout</a>
+                @endif
             </div>
         </div>
         {{ $slot }}
     </div>
+    @livewireScripts
 </body>
 </html>
