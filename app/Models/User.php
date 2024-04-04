@@ -53,4 +53,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->status ==1;
     }
+
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'post_like');
+    }
 }

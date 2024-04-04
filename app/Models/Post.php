@@ -36,4 +36,9 @@ class Post extends Model
     {
         return $this->status === 'draft';
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class,  'post_like');
+    }
 }

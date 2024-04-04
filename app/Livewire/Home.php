@@ -24,6 +24,9 @@ class Home extends Component
 
     public function incrementLikes(int $postId): void
     {
+        $user = auth()->user();
+        Session::forget('posts-liked');
+
         $likedPosts = Session::get('posts-liked', []);
 
         if (in_array($postId, $likedPosts)) {
@@ -34,5 +37,7 @@ class Home extends Component
 
         Session::put('posts-liked', [...$likedPosts, $postId]);
         $post->increment('likes');
+
+        $post->users()->attach($user->id);
     }
 }
